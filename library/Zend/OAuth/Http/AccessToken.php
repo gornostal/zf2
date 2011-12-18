@@ -104,7 +104,7 @@ class AccessToken extends HTTPClient
         $client      = OAuth\OAuth::getHttpClient();
 
         $client->setUri($this->_consumer->getAccessTokenUrl());
-        $client->setHeaders('Authorization', $headerValue);
+        $client->setHeaders(array('Authorization' => $headerValue));
         $client->setMethod($this->_preferredRequestMethod);
 
         return $client;
@@ -123,13 +123,10 @@ class AccessToken extends HTTPClient
         $client = OAuth\OAuth::getHttpClient();
         $client->setUri($this->_consumer->getAccessTokenUrl());
         $client->setMethod($this->_preferredRequestMethod);
-        $client->setRawData(
+        $client->setRawBody(
             $this->_httpUtility->toEncodedQueryString($params)
         );
-        $client->setHeaders(
-            Http\Client::CONTENT_TYPE,
-            Http\Client::ENC_URLENCODED
-        );
+        $client->setHeaders(array('Content-Type' => Http\Client::ENC_URLENCODED));
         return $client;
     }
 
@@ -168,7 +165,7 @@ class AccessToken extends HTTPClient
                     $this->_consumer->getAccessTokenUrl());
                 break;
         }
-        return $httpClient->request();
+        return $httpClient->send();
     }
 
     /**
